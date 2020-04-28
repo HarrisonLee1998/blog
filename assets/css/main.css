@@ -1,0 +1,34 @@
+html {
+  overflow: auto;
+}
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+.dark-mode body
+{
+  background-color: #292a2d;
+  color: #eee;
+}
+
+.light-mode body
+{
+  background-color: #eee;
+  color: #292a2d;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* @font-face{
+  font-family: 'HackBold';
+  src: url('https://cdn.harrisonlee.net/Hack-Bold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+} */
