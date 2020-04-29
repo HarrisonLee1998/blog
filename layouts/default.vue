@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <header>
-      <div id="nav">
-        <div id="logo">
+      <div id="nav" :class="checked ? 'menu-show' : 'menu-hidden'">
+        <a id="logo" href="/">
           harrison's blog
-        </div>
+        </a>
         <input id="check" type="checkbox" @change="checked=!checked">
         <label id="checkbtn" for="check">
           <i v-if="!checked" class="fa fa-bars" enter-active-class="zoomIn" leave-active-class="zoomOut" />
@@ -74,6 +74,12 @@ export default {
       } else {
         this.$colorMode.value = 'light'
       }
+    },
+    $route: {
+      handler () {
+        this.checked = false
+      },
+      deep: true
     }
   },
   created () {
@@ -89,11 +95,6 @@ export default {
 
 <style lang="scss" scoped>
 $height: 64px;
-.container{
-  background-repeat: no-repeat;
-  background-size:cover;
-  background-attachment:fixed;
-}
 header{
   min-height: $height;
 }
@@ -101,6 +102,7 @@ header{
   min-height: calc(100vh - 100px);
   min-height: -webkit-calc(100vh - 100px);
   min-height: -moz-calc(100vh - 100px);
+  overflow-x: hidden;
 }
 footer{
   height: 36px;
@@ -118,7 +120,6 @@ footer span{
   display: flex;
   justify-content: space-around;
   align-items: center;
-  text-align: center;
   width: 100%;
   height: $height;
   font-family: 'DengXian';
@@ -127,13 +128,15 @@ footer span{
   position: fixed;
   margin: 0;
   padding: 0;
-  z-index: 9999;
+  z-index: 99;
 }
-.dark-mode #nav{
-  background-color: rgba(0,0,0,0.5);
+.dark-mode #nav,
+.dark-mode #menu{
+  background-color: rgb(0,0,0);
 }
-.light-mode #nav{
-  background-color: rgba(255,255,255,0.5);;
+.light-mode #nav,
+.light-mode #menu{
+  background-color: rgb(255,255,255);
 }
  #logo {
    font-size: 20px;
@@ -147,11 +150,14 @@ footer span{
 }
 
 @media screen and(min-width: 680px){
-  .container {
-    background-image: url('https://cdn.harrisonlee.net/lifeisshort.png');
+  #main{
+    margin: 5%;
+    padding: 0 5%;
+    width: 80%;
   }
   #logo {
     width: 30%;
+    padding-left: 5%;
   }
   #menu {
     width: 70%;
@@ -163,7 +169,6 @@ footer span{
   .menu-item {
     max-width: 20%;
     min-width: 80px;
-    width: auto;
     text-align: center;
   }
   .menu-item > a {
@@ -175,8 +180,10 @@ footer span{
 }
 
 @media screen and(max-width: 680px){
-  .container{
-    background-image: url('https://cdn.harrisonlee.net/1585768671682.jpg');
+  #main{
+    margin: 0 2%;
+    padding: 3%;
+    width: 90%;
   }
   #logo {
     width: 80%;
@@ -197,17 +204,16 @@ footer span{
     bottom: 0;
     transition: all 0.3s linear;
   }
-  .dark-mode #menu {
-    background-color: rgba(0,0,0,0.7);
-  }
-  .light-mode #menu{
-    background-color: rgba(255,255,255,0.7);;
-  }
   .menu-item{
     height: $height;
     line-height: $height;
+    text-align: center;
   }
-  #check:checked ~ #menu{
+  .menu-item > a{
+    display: block;
+    width: 100%;
+  }
+  .menu-show > #menu{
     right: 0;
   }
 }

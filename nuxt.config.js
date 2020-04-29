@@ -47,7 +47,8 @@ module.exports = {
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
-    '@nuxtjs/color-mode'
+    '@nuxtjs/color-mode',
+    '@nuxtjs/moment'
     // '@nuxtjs/vuetify'
   ],
   /*
@@ -62,16 +63,16 @@ module.exports = {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    // '/api': {
-    //   target: 'http://127.0.0.1:8080/',
-    //   pathRewrite: {
-    //     '^/api': '/'
-    //   }
-    // }
-  },
-  proxy: {
     proxy: true,
     retry: false
+  },
+  proxy: {
+    '/api': {
+      target: 'http://127.0.0.1:8080/',
+      pathRewrite: {
+        '^/api': '/'
+      }
+    }
   },
   router: {
     // middleware: ['auth', 'device'],
