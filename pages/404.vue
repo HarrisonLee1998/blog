@@ -1,6 +1,6 @@
 <template>
   <div>
-    404 <nuxt-link to="/">
+    404 {{ $colorMode.value }} <nuxt-link to="/">
       首页
     </nuxt-link>
   </div>

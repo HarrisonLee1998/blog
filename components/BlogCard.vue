@@ -1,5 +1,5 @@
 <template>
-  <div class="article-card">
+  <div class="article-card backco">
     <div class="article-title one-line">
       <a :href="'/blog/entry/' + article.id" v-html="article.title" />
     </div>
@@ -19,7 +19,10 @@
       </span>
     </div>
     <div class="article-content">
-      <p v-html="article.pure_txt" />
+      <p v-if="article.pure_txt.trim() !== ''" v-html="article.pure_txt" />
+      <p v-if="article.pure_txt.trim() === ''" class="empty-content">
+        没有预览内容，请点击标题浏览详情
+      </p>
     </div>
   </div>
 </template>
@@ -59,12 +62,6 @@ export default {
   -webkit-box-shadow:  #ccc 0 0 10px;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
   -moz-box-shadow:  #ccc 0 0 10px;  /* Firefox 3.5 - 3.6 */
   box-shadow: #ccc 0 0 10px;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */
-}
-.dark-mode .article-card {
-  background-color: #000;
-}
-.light-mode .article-card {
-  background-color: #fff;
 }
 .article-title {
   // overflow: hidden;
@@ -134,5 +131,10 @@ export default {
    .article-content > p {
     -webkit-line-clamp:5;
   }
+}
+
+.empty-content {
+  font-style: italic;
+  font-size: 12px;
 }
 </style>

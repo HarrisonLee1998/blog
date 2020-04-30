@@ -30,8 +30,8 @@ export default {
 .archive-card {
   position: relative;
   cursor: pointer;
-  margin-bottom: 10%;
   display: block;
+  margin-bottom: 20%;
 }
 /* .archive-card:hover{
   -webkit-box-shadow:  #ccc 0 0 10px;
@@ -72,7 +72,7 @@ img {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
-@media screen and (min-width: 680px){
+@media screen and (min-width: 420px){
   .archive-card {
     width: 355px;
     height: 200px;
@@ -80,7 +80,7 @@ img {
   }
 }
 
-@media screen and (max-width: 680px){
+@media screen and (max-width: 420px){
   .archive-card {
     height: 240px;
   }

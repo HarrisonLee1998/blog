@@ -104,6 +104,9 @@ export default {
 }
 
 @media screen and (min-width: 680px){
+  #main {
+    margin: 5% 10%;
+  }
   .article-title {
     width: 80%;
   }

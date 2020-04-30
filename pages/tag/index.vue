@@ -1,8 +1,10 @@
 <template>
   <div>
-    <span v-for="tag in tags" :key="tag.title" class="tag">
-      <a :href="'/tag/' + tag.title">{{ tag.title }}<small>({{ tag.articleNums }})</small></a>
-    </span>
+    <div class="tag-container">
+      <span v-for="tag in tags" :key="tag.title" class="tag">
+        <a :href="'/tag/' + tag.title">{{ tag.title }}<small>({{ tag.articleNums }})</small></a>
+      </span>
+    </div>
   </div>
 </template>
 
@@ -21,6 +23,11 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 .tag {
   display: inline-block;
   margin: 20px;

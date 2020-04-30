@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <header>
-      <div id="nav" :class="checked ? 'menu-show' : 'menu-hidden'">
+      <div id="nav" class="backco" :class="checked ? 'menu-show' : 'menu-hidden'">
         <a id="logo" href="/">
           harrison's blog
         </a>
@@ -10,7 +10,7 @@
           <i v-if="!checked" class="fa fa-bars" enter-active-class="zoomIn" leave-active-class="zoomOut" />
           <i v-else class="fa fa-times" enter-active-class="zoomIn" leave-active-class="zoomOut" />
         </label>
-        <div id="menu">
+        <div id="menu" class="backco">
           <div v-for="item in items" :key="item.title" class="menu-item">
             <nuxt-link :to="item.link">
               {{ item.title }}
@@ -43,27 +43,27 @@ export default {
     return {
       items: [
         {
-          title: '首页',
-          no: 1,
-          link: '/'
+          title: '博客',
+          no: 2,
+          link: '/blog'
         },
         {
           title: '归档',
-          no: 2,
+          no: 3,
           link: '/archive'
         },
         {
           title: '标签',
-          no: 3,
+          no: 4,
           link: '/tag'
         },
         {
           title: '关于',
-          no: 4,
+          no: 5,
           link: '/about'
         }
       ],
-      isDark: false,
+      isDark: undefined,
       checked: false
     }
   },
@@ -95,6 +95,14 @@ export default {
 
 <style lang="scss" scoped>
 $height: 64px;
+.light-mode .container {
+  background-image: url('http://127.0.0.1:3002/palm-leaf.png');
+  background-attachment: fixed;
+}
+.dark-mode .container {
+  background-image: url('http://127.0.0.1:3002/dark-grey-terrazzo.png');
+  background-attachment: fixed;
+}
 header{
   min-height: $height;
 }
@@ -110,8 +118,7 @@ footer{
   padding-right: 10px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-end;
-  align-items: flex-end;
+  justify-content: center;
 }
 footer span{
   margin-left: 20px;
@@ -130,16 +137,9 @@ footer span{
   padding: 0;
   z-index: 99;
 }
-.dark-mode #nav,
-.dark-mode #menu{
-  background-color: rgb(0,0,0);
-}
-.light-mode #nav,
-.light-mode #menu{
-  background-color: rgb(255,255,255);
-}
+
  #logo {
-   font-size: 20px;
+   font-size: 24px;
  }
  #toggle-theme > i{
   cursor: pointer;
@@ -152,8 +152,8 @@ footer span{
 @media screen and(min-width: 680px){
   #main{
     margin: 5%;
-    padding: 0 5%;
-    width: 80%;
+    // padding: 0 1%;
+    // width: 80%;
   }
   #logo {
     width: 30%;
@@ -180,20 +180,16 @@ footer span{
 }
 
 @media screen and(max-width: 680px){
-  #main{
-    margin: 0 2%;
-    padding: 3%;
-    width: 90%;
+  #main {
+    margin: 5%;
   }
   #logo {
     width: 80%;
     text-align: left;
-    padding-left: 20px;
   }
   #checkbtn {
-    width: 20%;
+    width: 10%;
     text-align: right;
-    padding-right: 20px;
   }
   #menu {
     position: fixed;

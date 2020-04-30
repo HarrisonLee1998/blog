@@ -15,7 +15,16 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.0/css/all.min.css' }
+      { rel: 'stylesheet', href: 'https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.0/css/all.min.css' }, {
+        rel: 'stylesheet',
+        href:
+          'https://cdn.bootcss.com/github-markdown-css/4.0.0/github-markdown.min.css'
+      },
+      {
+        rel: 'stylesheet',
+        href:
+          'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/styles/solarized-light.min.css'
+      }
     ]
   },
   server: {
@@ -39,7 +48,8 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '@/plugins/axios'
+    '@/plugins/axios',
+    '@/plugins/katex'
   ],
   /*
   ** Nuxt.js dev-modules
