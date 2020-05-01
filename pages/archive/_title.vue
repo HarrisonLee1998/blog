@@ -6,7 +6,7 @@
     <div class="archive-article-list">
       <div v-for="article in pageInfo.list" :key="article.id" class="article-box">
         <div class="article-title one-line">
-          <a :href="'/blog/entry/' + article.id">{{ article.title }}</a>
+          <a :href="'/post/entry/' + article.id">{{ article.title }}</a>
         </div>
         <div class="article-date">
           {{ article.lastUpdateDate }}

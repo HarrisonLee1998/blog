@@ -1,8 +1,32 @@
 <template>
   <div>
     <div class="content">
+      <div>
+        <div class="search-input">
+          <input v-model="keyword" placeholder="输入关键字进行搜索" :readonly="searchFinished" @focus="showError = false">
+          <i v-show="!searchFinished" class="fas fa-search" @click="handleSearch" />
+          <i v-show="searchFinished" class="fas fa-times" @click="resetSearch" />
+        </div>
+        <div class="search-result">
+          <div v-show="showError" class="search-error">
+            {{ searchError }}
+          </div>
+          <!-- <div v-show="searchFinished" class="search-reset" @click="resetSearch">
+            RESET
+          </div> -->
+        </div>
+      </div>
       <BlogCard v-for="article in pageUtil.list" :key="article.id" :article="article" />
-      <Pagination :pages="pageUtil.pages" :page-no="pageUtil.pageNo" :pager-count="pagerCount" @changePageNo="changePageNo" />
+      <div v-show="mode === 1 && pageUtil.total === 0" class="empty-result">
+        <span>当前并没有与关键词<strong>{{ keyword }}</strong>相关的文章</span>
+      </div>
+      <Pagination
+        v-show="pageUtil.pages > 1"
+        :pages="pageUtil.pages"
+        :page-no="pageUtil.pageNo"
+        :pager-count="pagerCount"
+        @changePageNo="changePageNo"
+      />
     </div>
   </div>
 </template>
@@ -28,7 +52,8 @@ export default {
       searchHistory: [],
       searchError: '',
       showError: false,
-      pagerCount: 3
+      pagerCount: 3,
+      searchFinished: false
     }
   },
   beforeMount () {
@@ -70,11 +95,7 @@ export default {
         })
     },
     searchArticle () {
-      this.validateSearch()
-      if (this.showError) {
-        return
-      }
-      this.$axios.get('/api/article', {
+      this.$axios.get('/api/article/search', {
         params: {
           keyword: this.keyword,
           pageNo: this.pageNo,
@@ -85,13 +106,14 @@ export default {
           this.pageUtil = res.data.map.pageUtil
           this.searchHistory.push({ keyword: this.keyword, date: new Date() })
           window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
+          this.searchFinished = true
         }
       })
     },
     validateSearch () {
       this.keyword = this.keyword.trim()
       if (this.keyword === '') {
-        this.searchHistory = '关键词不能为空'
+        this.searchError = '关键词不能为空'
       } else if (this.keyword.includes('/')) {
         this.searchError = "关键词中不能包含字符'/'"
       } else if (this.keyword.includes('\\')) {
@@ -114,19 +136,38 @@ export default {
           this.searchHistory = []
         }
       } else {
-        const strs = this.keyword.split('')
-        strs.filter(s => s.trim() > 0)
+        let strs = this.keyword.split('')
+        strs = strs.filter(s => s.trim() > 0)
         strs.forEach((s) => {
           if (s.length === 1 && s.charCodeAt() < 128) {
-            this.searchError = '关键词中不能存在单个ascaii字符'
+            this.searchError = '关键词中不能存在分隔开的单个ascaii字符'
           }
         })
       }
-      if (this.searchError === '') {
+      if (this.searchError.trim() !== '') {
         this.showError = true
       } else {
         this.showError = false
       }
+    },
+    handleSearch () {
+      this.pageNo = 1
+      this.mode = 1
+      this.showError = false
+      this.searchFinished = false
+      this.validateSearch()
+      if (!this.showError) {
+        this.handleMode()
+      }
+    },
+    resetSearch () {
+      this.mode = 0
+      this.pageNo = 1
+      this.keyword = ''
+      this.showError = false
+      this.searchError = ''
+      this.searchFinished = false
+      this.handleMode()
     }
   },
   head () {
@@ -138,6 +179,60 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.search-input {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+}
+.search-input > input {
+  outline: 0;
+  border: none;
+  padding: 0;
+  height: 30px;
+  font-size: 16px;
+  background:transparent;
+  color: inherit;
+  padding-right: 20px;
+  width: calc(100%  - 20px);
+}
+.search-input > i {
+  position: absolute;
+  font-size: 20px;
+  line-height: 30px;
+  right: 0;
+  cursor: pointer;
+}
+.light-mode .search-input > input{
+  border-bottom: 1px solid #000;
+}
+.dark-mode .search-input > input{
+  border-bottom: 1px solid #fff;
+}
+.search-input > input:focus {
+  border-bottom:1px solid  #9980FA;
+}
+.search-input > input:focus ~ i {
+  color: #9980FA;
+}
+
+.search-result {
+  padding: 10px 0;
+  margin-bottom: 10%;
+  .search-error {
+    font-size: 12px;
+    font-style: italic;
+    color: #9980FA;
+  }
+  .search-reset {
+    cursor: pointer;
+  }
+  .search-reset:hover{
+    text-decoration: underline;
+  }
+}
+.empty-result {
+  text-align: center;
+}
 @media screen and(min-width: 680px){
   .content{
     width: 60%;

@@ -1,7 +1,7 @@
 <template>
   <div class="article-card backco">
     <div class="article-title one-line">
-      <a :href="'/blog/entry/' + article.id" v-html="article.title" />
+      <a :href="'/post/entry/' + article.id" v-html="article.title" />
     </div>
     <div class="article-info">
       <span><i class="fas fa-folder-open" />
@@ -58,7 +58,6 @@ export default {
   border-radius: 5px;
 }
 .article-card:hover {
-  cursor: pointer;
   -webkit-box-shadow:  #ccc 0 0 10px;  /* Safari 3-4, iOS 4.0.2 - 4.2, Android 2.3+ */
   -moz-box-shadow:  #ccc 0 0 10px;  /* Firefox 3.5 - 3.6 */
   box-shadow: #ccc 0 0 10px;  /* Opera 10.5, IE 9, Firefox 4+, Chrome 6+, iOS 5 */

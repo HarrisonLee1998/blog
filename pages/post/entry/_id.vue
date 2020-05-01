@@ -17,6 +17,10 @@
           </span>
         </div>
         <div class="article-content" v-html="article.html" />
+        <div class="article-footer">
+          <div><i class="fas fa-thumbs-up" title="如果有收获，就点赞一下吧" /></div>
+        </div>
+        <div id="gitalk-container" />
       </div>
       <div :class="['catalogue', catalogue ? 'catalogue-show' : '']">
         <p class="catalogue-title">
@@ -24,18 +28,22 @@
           <i class="fas fa-times content-cancel-icon" @click="catalogue = false" />
         </p>
         <p v-for="(title, i) in titles" :key="i" class="content-title">
-          <a :href="'#heading' + i">{{ title }}</a>
+          <a
+            :href="'#heading' + i"
+          >{{ title }}</a>
         </p>
         <p v-if="titles.length === 0">
-          该文章没有标题~
+          该文章内容没有标题~
         </p>
       </div>
-      <i class="fas fa-hand-point-right content-title-icon" @click="catalogue = true" />
+      <i class="fas fa-hand-point-left content-title-icon" @click="catalogue = true" />
     </div>
   </div>
 </template>
 
 <script>
+import 'gitalk/dist/gitalk.css'
+import Gitalk from 'gitalk'
 export default {
   async asyncData ({ route, $axios, redirect, $moment }) {
     const id = route.params.id
@@ -58,13 +66,14 @@ export default {
   data () {
     return {
       titles: [],
-      fixed: false,
-      catalogue: false
+      catalogue: false,
+      thumbed: false
     }
   },
   mounted () {
     this.handleTitle()
     this.initEvent()
+    this.gitalk()
   },
   methods: {
     handleTitle () {
@@ -84,14 +93,21 @@ export default {
     },
     initEvent () {
       window.addEventListener('scroll', () => {
-        const height =
-          document.body.scrollTop || document.documentElement.scrollTop
-        if (height > 64) {
-          this.fixed = true
-        } else {
-          this.fixed = false
-        }
+        // const height =
+        //   document.body.scrollTop || document.documentElement.scrollTop
       })
+    },
+    gitalk () {
+      const gitalk = new Gitalk({
+        clientID: '5b55e88d38cec0c96479',
+        clientSecret: 'f70a6584c019df05f3328a5b10b6ee2df70d53ae',
+        repo: 'blog-review',
+        owner: 'HarrisonLee1998',
+        admin: ['HarrisonLee1998'],
+        id: location.pathname, // Ensure uniqueness and length less than 50
+        distractionFreeMode: true // Facebook-like distraction free mode
+      })
+      gitalk.render('gitalk-container')
     }
   }
 }
@@ -102,14 +118,14 @@ $height: 64px;
 
 .catalogue {
   position: fixed;
-  width: 300px;
+  width: 240px;
   top: $height;
-  left: -100%;
+  right: -100%;
   bottom: 0;
   transition: all 0.3s linear;
   border-right: 1px solid #ccc;
   padding: 10px;
-  z-index: 2;
+  z-index: 9999;
   overflow: auto;
 }
 .light-mode .catalogue {
@@ -121,7 +137,7 @@ $height: 64px;
 }
 
 .catalogue-show {
-  left: 0;
+  right: 0;
 }
 
 .catalogue-title {
@@ -132,6 +148,26 @@ $height: 64px;
   font-weight: bold;
   padding-bottom: 10px;
 }
+
+.content-title {
+  a {
+    display: block;
+    position: relative;
+    margin-left: 5px;
+  }
+  a::before {
+    content: '|';
+    font-weight: bolder;
+    color: deeppink;
+    margin-right: 0.5rem;
+    position: absolute;
+    left: -10px;
+  }
+  a:hover::before {
+    color: deepskyblue;
+  }
+}
+
 .content-cancel-icon,
 .content-title-icon {
   cursor: pointer;
@@ -139,8 +175,8 @@ $height: 64px;
 
 .content-title-icon {
   position: fixed;
-  bottom: 20px;
-  left: 0;
+  bottom: 40px;
+  right: 0;
   cursor: pointer;
   font-size: 20px;
 }
@@ -171,16 +207,34 @@ $height: 64px;
   margin-right: 5px;
 }
 
+.article-footer {
+  display: flex;
+  justify-content: center;
+}
+
+.article-footer > div {
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  line-height: 60px;
+  border-radius: 50%;
+  color: #fff;
+  background-color: deeppink;
+  font-size: 30px;
+  cursor: pointer;
+}
+
 @media screen and (min-width: 680px){
   .article-container {
     width: 50%;
     padding: 3%;
   }
-  .right {
-    justify-content: flex-end;
-    .article-container {
-      margin-right: 10%;
-    }
+}
+
+@media screen and (max-width: 680px){
+  .article-container {
+    padding: 3%;
+    overflow: auto;
   }
 }
 
@@ -192,5 +246,13 @@ $height: 64px;
 }
 .article-container a:hover {
   text-decoration: underline;
+}
+.dark-mode .gt-svg {
+  background-color: #fff;
+  color: #000;
+}
+mark {
+  background-color: deeppink;
+  color: #fff;
 }
 </style>

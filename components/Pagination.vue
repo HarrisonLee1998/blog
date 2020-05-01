@@ -36,6 +36,9 @@ export default {
     }
   },
   watch: {
+    pages () {
+      this.handlePage()
+    },
     pageNo () {
       if (this.pageNum !== this.pageNo) {
         this.pageNum = this.pageNo
@@ -85,7 +88,6 @@ span {
   height: 26px;
   line-height: 26px;
   text-align: center;
-  color: #ccc;
 }
 span:not(:last-child) {
   margin-right: 20px;

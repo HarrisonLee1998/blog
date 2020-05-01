@@ -2,6 +2,7 @@
   <div class="container">
     <header>
       <div id="nav" class="backco" :class="checked ? 'menu-show' : 'menu-hidden'">
+        <div class="hide-layer" @click="checked = false" />
         <a id="logo" href="/">
           harrison's blog
         </a>
@@ -43,9 +44,9 @@ export default {
     return {
       items: [
         {
-          title: '博客',
+          title: '文章',
           no: 2,
-          link: '/blog'
+          link: '/post'
         },
         {
           title: '归档',
@@ -96,11 +97,12 @@ export default {
 <style lang="scss" scoped>
 $height: 64px;
 .light-mode .container {
-  background-image: url('http://127.0.0.1:3002/palm-leaf.png');
+  // background-image: url('https://cdn.harrisonlee.net/palm-leaf.png');
+  background-image: url('http://localhost:3002/bananas.png');
   background-attachment: fixed;
 }
 .dark-mode .container {
-  background-image: url('http://127.0.0.1:3002/dark-grey-terrazzo.png');
+  background-image: url('https://cdn.harrisonlee.net/dark-grey-terrazzo.png');
   background-attachment: fixed;
 }
 header{
@@ -183,34 +185,52 @@ footer span{
   #main {
     margin: 5%;
   }
+  #nav {
+    display: flex;
+    flex-direction: row-reverse;
+  }
   #logo {
     width: 80%;
-    text-align: left;
+    text-align: right;
   }
   #checkbtn {
     width: 10%;
-    text-align: right;
   }
   #menu {
     position: fixed;
     min-width: 200px;
-    height: calc(100vh, -$height);
+    // height: calc(100vh, -$height);
     top: $height;
-    right: -100%;
+    left: -100%;
     bottom: 0;
     transition: all 0.3s linear;
+    border-top: 1px solid #ccc;
   }
-  .menu-item{
+  .menu-item {
     height: $height;
     line-height: $height;
     text-align: center;
   }
-  .menu-item > a{
+  .menu-item > a {
     display: block;
     width: 100%;
   }
-  .menu-show > #menu{
+  .menu-show > #menu {
+    left: 0;
+    z-index: 10;
+  }
+  .hide-layer {
+    display: none;
+  }
+  .menu-show > .hide-layer {
+    display: block;
+    position: fixed;
+    top: $height;
+    left: 0;
     right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9;
   }
 }
 </style>
