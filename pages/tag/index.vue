@@ -2,7 +2,7 @@
   <div>
     <div class="tag-container">
       <span v-for="tag in tags" :key="tag.title" class="tag">
-        <a :href="'/tag/' + tag.title">{{ tag.title }}<small>({{ tag.articleNums }})</small></a>
+        <a :href="'/tag/' + encodeURI(tag.title)">{{ tag.title }}<small>({{ tag.articleNums }})</small></a>
       </span>
     </div>
   </div>
@@ -16,7 +16,7 @@ export default {
   },
   head () {
     return {
-      title: '标签'
+      title: '标签列表'
     }
   }
 }

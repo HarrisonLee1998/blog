@@ -14,7 +14,13 @@ export default {
   },
   async asyncData ({ $axios }) {
     const { data } = await $axios.get('/api/archive')
-    return { archives: data.map.archives }
+    const archives = data.map.archives
+    return { archives }
+  },
+  head () {
+    return {
+      title: '归档列表'
+    }
   }
 }
 </script>
@@ -23,6 +29,6 @@ export default {
 .archive-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: space-between;
 }
 </style>

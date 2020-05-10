@@ -1,5 +1,5 @@
 <template>
-  <div>错误页面</div>
+  <div>Some errors occured on the server side ... </div>
 </template>
 
 <script>
@@ -25,9 +25,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-h1 {
-  font-size: 20px;
-}
-</style>

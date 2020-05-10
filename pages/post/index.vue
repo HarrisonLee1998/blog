@@ -3,22 +3,22 @@
     <div class="content">
       <div>
         <div class="search-input">
-          <input v-model="keyword" placeholder="输入关键字进行搜索" :readonly="searchFinished" @focus="showError = false">
-          <i v-show="!searchFinished" class="fas fa-search" @click="handleSearch" />
-          <i v-show="searchFinished" class="fas fa-times" @click="resetSearch" />
+          <input v-model="keyword" placeholder="输入关键词进行搜索" @keyup.enter="handleSearch" @focus="showError = false">
+          <i class="fas fa-search" @click="handleSearch" />
+          <!-- <i v-show="searchFinished" class="fas fa-times" @click="resetSearch" /> -->
         </div>
         <div class="search-result">
           <div v-show="showError" class="search-error">
             {{ searchError }}
           </div>
-          <!-- <div v-show="searchFinished" class="search-reset" @click="resetSearch">
+          <div v-show="searchFinished" class="search-reset" @click="resetSearch">
             RESET
-          </div> -->
+          </div>
         </div>
       </div>
       <BlogCard v-for="article in pageUtil.list" :key="article.id" :article="article" />
-      <div v-show="mode === 1 && pageUtil.total === 0" class="empty-result">
-        <span>当前并没有与关键词<strong>{{ keyword }}</strong>相关的文章</span>
+      <div v-show="searchFinished && pageUtil.total === 0" class="empty-result">
+        <span>当前并没有与关键词<strong>{{ keyword2 }}</strong>相关的文章</span>
       </div>
       <Pagination
         v-show="pageUtil.pages > 1"
@@ -49,6 +49,7 @@ export default {
       pageSize: 5,
       mode: 0,
       keyword: '',
+      keyword2: '',
       searchHistory: [],
       searchError: '',
       showError: false,
@@ -58,15 +59,6 @@ export default {
   },
   beforeMount () {
     this.handleMode()
-  },
-  mounted () {
-    const sh = localStorage.getItem('searchHistory')
-    if (Array.isArray(sh)) {
-      this.searchHistory = sh
-    }
-  },
-  beforeDestroy () {
-    localStorage.setItem('searchHistory', this.searchHistory)
   },
   methods: {
     handleMode () {
@@ -102,13 +94,21 @@ export default {
           pageSize: this.pageSize
         }
       }).then((res) => {
-        if (res.data.status === 'OK') {
-          this.pageUtil = res.data.map.pageUtil
-          this.searchHistory.push({ keyword: this.keyword, date: new Date() })
-          window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
-          this.searchFinished = true
-        }
+        this.handleSearchResult(res)
       })
+    },
+    handleSearchResult (res) {
+      if (res.data.status === 'OK') {
+        this.pageUtil = res.data.map.pageUtil
+        this.keyword2 = this.keyword
+        this.searchHistory.push(new Date())
+      } else if (res.data.status === 'TOO_MANY_REQUESTS') {
+        this.searchError = '搜索过于频繁，请稍后再试'
+        this.showError = true
+        this.pageUtil = { pageNo: 0, pages: 0 }
+      }
+      this.searchFinished = true
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' })
     },
     validateSearch () {
       this.keyword = this.keyword.trim()
@@ -118,31 +118,14 @@ export default {
         this.searchError = "关键词中不能包含字符'/'"
       } else if (this.keyword.includes('\\')) {
         this.searchError = "关键词中不能包含字符'\\'"
-      } else if (this.searchHistory.length > 2) {
-        const lastSearch = this.searchHistory[this.searchHistory.length - 1]
-        const date = Date.parse(lastSearch.date)
-        if (!isNaN(date)) {
-          if (new Date(date - new Date().getTime() > 1000 * 60)) {
-            // 超过一个小时没有搜索，恢复
-            this.searchHistory = []
-          } else if (date - new Date().getTime() < 1000 * 10) {
-            // 搜索记录超过三次以后，搜索间隔为10分钟
-            this.searchError = '搜索过于频繁，请稍后再试~'
-          } else {
-            this.searchHistory.pop()
-          }
-        } else {
-          // 说明localStorage已经被篡改了，此时前端判断就没必要了，直接交给后台判断
+      }
+      if (this.searchHistory.length > 2) {
+        const last = this.searchHistory[this.searchHistory.length - 1]
+        if (new Date().getTime() - last.getTime() < 1000 * 10) {
+          this.searchError = '搜索过于频繁，请稍后再试'
+        } else if (new Date().getTime() - last.getTime() > 1000 * 60) {
           this.searchHistory = []
         }
-      } else {
-        let strs = this.keyword.split('')
-        strs = strs.filter(s => s.trim() > 0)
-        strs.forEach((s) => {
-          if (s.length === 1 && s.charCodeAt() < 128) {
-            this.searchError = '关键词中不能存在分隔开的单个ascaii字符'
-          }
-        })
       }
       if (this.searchError.trim() !== '') {
         this.showError = true
@@ -219,12 +202,11 @@ export default {
   padding: 10px 0;
   margin-bottom: 10%;
   .search-error {
-    font-size: 12px;
-    font-style: italic;
-    color: #9980FA;
+    font-size: 14px;
   }
   .search-reset {
     cursor: pointer;
+    display: inline-block;
   }
   .search-reset:hover{
     text-decoration: underline;

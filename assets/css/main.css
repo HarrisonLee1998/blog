@@ -8,6 +8,8 @@ html, body {
 body {
   margin: 0;
   padding: 0;
+  font-family: -apple-system, consolas, BlinkMacSystemFont, PingFang SC, DengXian
+    Microsoft Yahei, Segoe UI, Helvetica, Arial, sans-serif, Segoe UI Emoji
 }
 .dark-mode body
 {
@@ -32,61 +34,13 @@ a {
   text-decoration: none;
 }
 
-@font-face{
-  font-family: 'HackBold';
-  src: url('https://cdn.harrisonlee.net/Hack-Bold.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
-pre, code {
-  font-size: 16px;
-  font-family: 'HackBold';
-}
-
 .one-line {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  position: relative;
-  margin-top: -64px;
-  padding-top: 64px;
-}
-
-h1 {
-  font-size: 20px;
-}
-
-h2 {
-  font-size: 18px;
-}
-
-h3, h4, h5, h6 {
-  font-size: 16px;
-}
-
-h1:hover::before,
-h2:hover::before,
-h3:hover::before,
-h4:hover::before,
-h5:hover::before,
-h6:hover::before {
-  content: '#';
-  position: absolute;
-  left: -20px;
-  margin-right: 10px;
-  color: deeppink;
-  font-family: 'Brush Script MT';
-}
-
-.keyword {
-  color: deeppink;
+::selection {
+  background-color: deeppink;
+  color: #fff;
 }

@@ -43,15 +43,19 @@ export default {
       return html.replace(/<\/?[^>]*>/g, '')
     },
     handleDate () {
-      const d = this.$moment(new Date(this.article.last_update_date), 'Asia/ShangHai').utc()
-      this.article.last_update_date = this.$moment(d)
-        .local()
-        .format('YYYY/MM/DD')
+      this.article.last_update_date = new Intl.DateTimeFormat('zh-CN',
+        { year: 'numeric', month: '2-digit', day: '2-digit' })
+        .format(new Date(this.article.last_update_date))
     }
   }
 }
 </script>
 
+<style>
+.keyword {
+  color: deeppink;
+}
+</style>
 <style lang="scss" scoped>
 .article-card{
   margin-bottom: 10%;

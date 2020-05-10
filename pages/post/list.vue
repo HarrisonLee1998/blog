@@ -2,7 +2,7 @@
   <div>
     <ul>
       <li v-for="article in articles" :key="article.id">
-        <nuxt-link :to="'/blog/entry/' + article.id">
+        <nuxt-link :to="'/post/entry/' + article.id">
           {{ article.title }}
         </nuxt-link>
       </li>

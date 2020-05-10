@@ -6,8 +6,10 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    titleTemplate: '%s - ' + process.env.npm_package_name,
-    title: process.env.npm_package_name || '',
+    // titleTemplate: '%s - ' + process.env.npm_package_name,
+    // title: process.env.npm_package_name || '',
+    titleTemplate: '%s - ' + 'harrison\' blog',
+    // title: 'harrison\' blog',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -15,20 +17,28 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.0/css/all.min.css' }, {
-        rel: 'stylesheet',
-        href:
-          'https://cdn.bootcss.com/github-markdown-css/4.0.0/github-markdown.min.css'
-      },
+      { rel: 'stylesheet', href: 'https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.0/css/all.min.css' },
+      // {
+      //   rel: 'stylesheet',
+      //   href:
+      //     'https://cdn.bootcss.com/github-markdown-css/4.0.0/github-markdown.min.css'
+      // },
       {
         rel: 'stylesheet',
         href:
           'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.0/styles/solarized-light.min.css'
+      },
+      {
+        rel: 'stylesheet',
+        href: 'https://cdn.bootcdn.net/ajax/libs/KaTeX/0.11.1/katex.min.css'
       }
+    ],
+    script: [
+      { src: 'https://cdn.bootcdn.net/ajax/libs/KaTeX/0.11.1/katex.min.js' }
     ]
   },
   server: {
-    host: '0.0.0.0',
+    host: '127.0.0.1',
     port: '3002'
   },
   /*
@@ -48,8 +58,8 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '@/plugins/axios',
-    '@/plugins/katex'
+    '@/plugins/axios'
+    // '@/plugins/katex'
   ],
   /*
   ** Nuxt.js dev-modules
@@ -57,10 +67,13 @@ module.exports = {
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
-    '@nuxtjs/color-mode',
-    '@nuxtjs/moment'
+    '@nuxtjs/color-mode'
+    // '@nuxtjs/moment'
     // '@nuxtjs/vuetify'
   ],
+  colorMode: {
+    preference: 'light'
+  },
   /*
   ** Nuxt.js modules
   */
@@ -78,7 +91,7 @@ module.exports = {
   },
   proxy: {
     '/api': {
-      target: 'http://127.0.0.1:8080/',
+      target: 'http://127.0.0.1:8080/blog',
       pathRewrite: {
         '^/api': '/'
       }
@@ -124,5 +137,6 @@ module.exports = {
     */
     extend (config, ctx) {
     }
+    // analyze: true
   }
 }

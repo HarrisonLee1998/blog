@@ -59,10 +59,8 @@ export default {
     },
     handleDate () {
       this.pageInfo.list.forEach((article) => {
-        const d = this.$moment(new Date(article.lastUpdateDate), 'Asia/ShangHai').utc()
-        article.lastUpdateDate = this.$moment(d)
-          .local()
-          .format('YYYY/MM/DD')
+        article.lastUpdateDate = new Intl.DateTimeFormat('zh-CN',
+          { year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(article.lastUpdateDate))
       })
     }
   },
