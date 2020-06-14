@@ -250,6 +250,7 @@ $height: 64px;
   font-size: 24px;
   font-weight: bolder;
   padding-bottom: 20px;
+  word-break: break-word;
 }
 .field {
   display: inline-block;
@@ -378,11 +379,12 @@ mark {
 </style>
 
 <style>
-h1,
+h1:not(:first-child),
 h2,h3,h4,h5,h6{
-  position: relative;
+  /* position: relative;
   margin-top: -64px;
-  padding-top: 64px;
+  padding-top: 64px; */
+  /* padding-top: 64px; */
 }
 h1 {
   font-size: 20px;

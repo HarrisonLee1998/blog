@@ -15,6 +15,12 @@
 
 <script>
 export default {
+  async asyncData () {
+    await function () {
+      return { data: 123 }
+    }
+    console.log('首页')
+  },
   data () {
     return {
       avatarSrc: 'https://cdn.harrisonlee.net/avatar20200509.png'

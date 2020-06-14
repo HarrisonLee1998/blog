@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <header>
-      <div id="nav" class="backco" :class="checked ? 'menu-show' : 'menu-hidden'">
+      <div id="nav" :class="checked ? 'menu-show' : 'menu-hidden'">
         <div class="hide-layer" @click="checked = false" />
         <nuxt-link id="logo" to="/">
           harrison's blog
@@ -13,7 +13,7 @@
           <i v-show="!checked" class="fa fa-bars" />
           <i v-show="checked" class="fas fa-times" />
         </label>
-        <div id="menu" class="backco">
+        <div id="menu">
           <div v-for="item in items" :key="item.title" class="menu-item">
             <nuxt-link :to="item.link">
               {{ item.title }}
@@ -42,11 +42,18 @@
       </span> -->
     </footer>
     <i v-show="showUp" class="fas fa-arrow-up" @click="scrollToTop" />
+    <div v-show="bigImgShow" class="big-img" @click="bigImgShow = false">
+      <img :src="imgSrc">
+    </div>
   </div>
 </template>
 
 <script>
 export default {
+  async asyncData ($axios) {
+    const data = await $axios.get('jd.com')
+    console.log(data)
+  },
   data () {
     return {
       items: [
@@ -75,7 +82,9 @@ export default {
       checked: false,
       showUp: false,
       startYear: 2020,
-      nowYear: 2020
+      nowYear: 2020,
+      imgSrc: '',
+      bigImgShow: false
     }
   },
   watch: {
@@ -89,6 +98,7 @@ export default {
     $route: {
       handler () {
         this.checked = false
+        this.path = this.$route.path
       },
       deep: true
     }
@@ -104,6 +114,16 @@ export default {
   },
   mounted () {
     window.addEventListener('scroll', this.scroll)
+    document.body.addEventListener('contextmenu', (e) => {
+      e.preventDefault()
+    })
+    window.addEventListener('dblclick', (e) => {
+      const ele = e.target
+      if (ele.tagName === 'IMG') {
+        this.bigImgShow = true
+        this.imgSrc = ele.src
+      }
+    })
   },
   methods: {
     scroll () {
@@ -130,11 +150,13 @@ $height: 64px;
   background-attachment: fixed;
 }
 .dark-mode .container {
-  background-image: url('https://cdn.harrisonlee.net/dark-grey-terrazzo.png');
+  // background-image: url('https://cdn.harrisonlee.net/dark-grey-terrazzo.png');
+  background-image: url("../static/darkness.png");
   background-attachment: fixed;
 }
 header{
   min-height: $height;
+  backface-visibility: 0;
 }
 #main{
   min-height: calc(100vh - 100px);
@@ -163,7 +185,7 @@ footer{
   font-family: 'DengXian';
   font-size: 18px;
   font-weight: bold;
-  position: fixed;
+  // position: fixed;
   margin: 0;
   padding: 0;
   z-index: 99;
@@ -191,6 +213,25 @@ footer{
 
 #menu {
   font-size: 18px;
+}
+
+.big-img {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100vh;
+  overflow-y: hidden;
+  background-color: rgba($color: #eee, $alpha: .3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  img {
+    width: 80%;
+    height: auto;
+  }
 }
 
 @media screen and(min-width: 680px){
